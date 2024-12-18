@@ -1,4 +1,6 @@
+import 'package:farmerbuddy/core/services/user_setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'advisory_screen.dart';
 import 'home_screen.dart';
 import 'image_analysis_screen.dart';
 
@@ -13,6 +15,8 @@ class MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     ImageAnalysisScreen(),
+    UserSettingScreen(),
+    AdvisoryScreen(),
   ];
 
   void _onTabTapped(int index) {
@@ -38,6 +42,9 @@ class MainScreenState extends State<MainScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Analyze'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Advisory'),
         ],
       ),
     );

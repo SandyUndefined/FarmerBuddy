@@ -14,7 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final npkProvider = Provider.of<NPKProvider>(context, listen: false);
-    npkProvider.fetchNPKData();
+    npkProvider.fetchNPKData(context).catchError((error) {
+      // Handle errors gracefully
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.toString())),
+      );
+    });
   }
 
   @override
@@ -65,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            WeatherBanner(), // Weather banner widget
+            WeatherBanner(), // Add weather banner widget
           ],
         ),
       ),

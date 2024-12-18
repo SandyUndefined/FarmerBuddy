@@ -2,21 +2,25 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ThingSpeakService {
-  static Future<List<double>> fetchNPK(String apiUrl) async {
+  /// Fetches data for a specific field (N, P, or K) from ThingSpeak
+  static Future<List<double>> fetchFieldData(
+      String apiUrl, String fieldName) async {
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // Extract values from the JSON response
+
+        // Extract values for the specified field from the JSON response
         return List<double>.from(
           data['feeds']
-              .map((feed) => double.tryParse(feed['field1'] ?? '0') ?? 0),
+              .map((feed) => double.tryParse(feed[fieldName] ?? '0') ?? 0),
         );
       } else {
-        throw Exception('Failed to load NPK data: ${response.statusCode}');
+        throw Exception(
+            'Failed to load data for $fieldName: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error fetching NPK data: $e');
+      throw Exception('Error fetching data for $fieldName: $e');
     }
   }
 }
