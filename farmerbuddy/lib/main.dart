@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'screens/main_screen.dart';
 import 'providers/npk_provider.dart';
 import 'providers/weather_provider.dart';
+import 'providers/user_settings_provider.dart';
 
 void main() {
   runApp(FarmerBuddyApp());
@@ -14,8 +15,9 @@ class FarmerBuddyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NPKProvider()),
+        ChangeNotifierProvider(create: (_) => WeatherProvider()),
         ChangeNotifierProvider(
-            create: (_) => WeatherProvider()), // Add WeatherProvider
+            create: (_) => UserSettingsProvider()), // Add UserSettingsProvider
       ],
       child: MaterialApp(
         title: 'FarmerBuddy',

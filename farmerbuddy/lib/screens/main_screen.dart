@@ -4,10 +4,10 @@ import 'image_analysis_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
@@ -16,6 +16,13 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  // Method to programmatically set the tab index
+  void setTabIndex(int index) {
     setState(() {
       _currentIndex = index;
     });
