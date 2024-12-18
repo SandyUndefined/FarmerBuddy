@@ -15,7 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  String _currentLocation = 'Fetching...';
+  late Future<String> _locationFuture;
 
   final List<Widget> _screens = [
     HomeScreen(),
@@ -24,16 +24,15 @@ class MainScreenState extends State<MainScreen> {
     UserSettingScreen(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _locationFuture = LocationHelper.getCurrentLocation();
+  }
+
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-    });
-  }
-
-    Future<void> _fetchLocation() async {
-    String location = await LocationHelper.getCurrentLocation();
-    setState(() {
-      _currentLocation = location;
     });
   }
 
@@ -47,7 +46,22 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(location: _currentLocation),
+        appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: FutureBuilder<String>(
+          future: _locationFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CustomAppBar(location: 'Fetching...');
+            } else if (snapshot.hasError) {
+              return CustomAppBar(location: 'Error Fetching Location');
+            } else {
+              return CustomAppBar(
+                  location: snapshot.data ?? 'Unknown Location');
+            }
+          },
+        ),
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: FlashyTabBar(
         selectedIndex: _currentIndex,

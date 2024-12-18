@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             'Farmer Buddy',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -22,11 +22,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Row(
             children: [
-              Icon(Icons.location_on, color: AppColors.highlighter),
-              SizedBox(width: 5),
+              const Icon(Icons.location_on, color: AppColors.highlighter),
+              const SizedBox(width: 5),
               Text(
                 location,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
@@ -39,5 +39,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
