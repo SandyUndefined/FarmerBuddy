@@ -11,9 +11,12 @@ class NPKProvider with ChangeNotifier {
   List<double> get kValues => _kValues;
 
   Future<void> fetchNPKData() async {
-    _nValues = await ThingSpeakService.fetchNPK('https://thingspeak.mathworks.com/channels/2599948/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&title=Nitrogen%28N%29&type=line&yaxis=mg%2Fkg');
-    _pValues = await ThingSpeakService.fetchNPK('https://thingspeak.mathworks.com/channels/2599948/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Phosphorus%28P%29&type=line&update=15&yaxis=mg%2Fkg');
-    _kValues = await ThingSpeakService.fetchNPK('https://thingspeak.mathworks.com/channels/2599948/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Potassium&type=line&update=15&yaxis=mg%2Fkg');
+    _nValues = await ThingSpeakService.fetchNPK(
+        'https://api.thingspeak.com/channels/2599948/fields/1.json?results=10');
+    _pValues = await ThingSpeakService.fetchNPK(
+        'https://api.thingspeak.com/channels/2599948/fields/2.json?results=10');
+    _kValues = await ThingSpeakService.fetchNPK(
+        'https://api.thingspeak.com/channels/2599948/fields/3.json?results=10');
     notifyListeners();
   }
 }

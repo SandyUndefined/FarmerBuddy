@@ -37,14 +37,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Consumer<NPKProvider>(
               builder: (ctx, provider, _) {
+                if (provider.nValues.isEmpty ||
+                    provider.pValues.isEmpty ||
+                    provider.kValues.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Fetching NPK data... Please wait."),
+                    ),
+                  );
+                }
                 return Column(
                   children: [
                     NPKCard(
-                        title: 'Nitrogen (N)', value: provider.nValues.last),
+                      title: 'Nitrogen (N)',
+                      value: provider.nValues.last,
+                    ),
                     NPKCard(
-                        title: 'Phosphorus (P)', value: provider.pValues.last),
+                      title: 'Phosphorus (P)',
+                      value: provider.pValues.last,
+                    ),
                     NPKCard(
-                        title: 'Potassium (K)', value: provider.kValues.last),
+                      title: 'Potassium (K)',
+                      value: provider.kValues.last,
+                    ),
                   ],
                 );
               },
