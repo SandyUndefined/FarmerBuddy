@@ -25,29 +25,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('FarmerBuddy')),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Welcome to FarmerBuddy!",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
             Consumer<NPKProvider>(
               builder: (ctx, provider, _) {
                 if (provider.nValues.isEmpty ||
                     provider.pValues.isEmpty ||
                     provider.kValues.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
                       child: Text("Fetching NPK data... Please wait."),
                     ),
                   );

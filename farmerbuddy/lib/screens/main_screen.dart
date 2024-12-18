@@ -1,4 +1,8 @@
+import 'package:farmerbuddy/app_colors.dart';
 import 'package:farmerbuddy/core/services/user_setting_screen.dart';
+import 'package:farmerbuddy/utils/location_helper.dart';
+import 'package:farmerbuddy/widgets/custom_app_bar.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'advisory_screen.dart';
 import 'home_screen.dart';
@@ -11,6 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+  String _currentLocation = 'Fetching...';
 
   final List<Widget> _screens = [
     HomeScreen(),
@@ -25,6 +30,13 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
+    Future<void> _fetchLocation() async {
+    String location = await LocationHelper.getCurrentLocation();
+    setState(() {
+      _currentLocation = location;
+    });
+  }
+
   // Method to programmatically set the tab index
   void setTabIndex(int index) {
     setState(() {
@@ -35,18 +47,39 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(location: _currentLocation),
       body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        selectedItemColor: Colors.black, // Set selected icon color to black
-        unselectedItemColor: Colors.black54,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Analyze'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Advisory'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
+      bottomNavigationBar: FlashyTabBar(
+        selectedIndex: _currentIndex,
+        showElevation: true,
+        animationCurve: Curves.easeInOut,
+        onItemSelected: _onTabTapped,
+        backgroundColor: AppColors.background,
+        items: [
+          FlashyTabBarItem(
+            icon: const Icon(Icons.home),
+            title: const Text('Home'),
+            activeColor: AppColors.primary,
+            inactiveColor: AppColors.secondary,
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.camera),
+            title: const Text('Analyze'),
+            activeColor: AppColors.primary,
+            inactiveColor: AppColors.secondary,
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.info),
+            title: const Text('Advisory'),
+            activeColor: AppColors.primary,
+            inactiveColor: AppColors.secondary,
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            activeColor: AppColors.primary,
+            inactiveColor: AppColors.secondary,
+          ),
         ],
       ),
     );
