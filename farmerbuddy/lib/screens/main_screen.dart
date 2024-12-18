@@ -15,8 +15,8 @@ class MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     ImageAnalysisScreen(),
-    UserSettingScreen(),
     AdvisoryScreen(),
+    UserSettingScreen(),
   ];
 
   void _onTabTapped(int index) {
@@ -39,12 +39,14 @@ class MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
+        selectedItemColor: Colors.black, // Set selected icon color to black
+        unselectedItemColor: Colors.black54,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Analyze'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Advisory'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Settings'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Advisory'),
         ],
       ),
     );
