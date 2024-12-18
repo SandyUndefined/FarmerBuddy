@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../core/services/image_analysis_service.dart';
+import 'dart:io';
 
 class ImageAnalysisScreen extends StatefulWidget {
   @override
