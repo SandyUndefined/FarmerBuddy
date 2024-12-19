@@ -15,7 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     final npkProvider = Provider.of<NPKProvider>(context, listen: false);
     npkProvider.fetchNPKData(context).catchError((error) {
-      // Handle errors gracefully
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error.toString())),
       );
@@ -42,17 +41,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 return Column(
                   children: [
+                    // Nitrogen Card
                     NPKCard(
                       title: 'Nitrogen (N)',
                       value: provider.nValues.last,
+                      unit: 'mg/kg',
+                      description:
+                          'Essential for plant growth and photosynthesis.',
+                      backgroundImage: 'assets/images/nitrogen_bg.jpg',
                     ),
+                    const SizedBox(height: 16),
+                    // Phosphorus Card
                     NPKCard(
                       title: 'Phosphorus (P)',
                       value: provider.pValues.last,
+                      unit: 'mg/kg',
+                      description: 'Promotes root development and flowering.',
+                      backgroundImage: 'assets/images/phosphorus_bg.jpg',
                     ),
+                    const SizedBox(height: 16),
+                    // Potassium Card
                     NPKCard(
                       title: 'Potassium (K)',
                       value: provider.kValues.last,
+                      unit: 'mg/kg',
+                      description:
+                          'Helps regulate water and nutrient movement.',
+                      backgroundImage: 'assets/images/potassium_bg.jpg',
                     ),
                   ],
                 );
