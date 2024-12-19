@@ -7,17 +7,17 @@ class WateringAdvisoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
 
-    final forecast = weatherProvider.weatherData.isNotEmpty
-        ? weatherProvider.weatherData['list']
-        : [];
+    final forecast = weatherProvider.dailyWeather;
 
     String wateringAdvice = "No forecast data available.";
     if (forecast.isNotEmpty) {
       final precipitation = forecast[0]['rain'] ?? 0; // Example: rain in mm
       if (precipitation > 10) {
         wateringAdvice = "No watering needed today. Rain is expected.";
+      } else if (precipitation > 0 && precipitation <= 10) {
+        wateringAdvice = "Light watering may be sufficient today.";
       } else {
-        wateringAdvice = "Light watering is recommended today.";
+        wateringAdvice = "Adequate watering is recommended today.";
       }
     }
 
@@ -34,7 +34,10 @@ class WateringAdvisoryCard extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(wateringAdvice),
+            Text(
+              wateringAdvice,
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),

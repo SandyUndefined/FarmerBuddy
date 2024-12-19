@@ -16,15 +16,14 @@ class SoilHealthCard extends StatelessWidget {
     final kValue =
         npkProvider.kValues.isNotEmpty ? npkProvider.kValues.last : 0;
 
-    final temperature = weatherProvider.weatherData.isNotEmpty
-        ? weatherProvider.weatherData['list'][0]['main']['temp']
-        : 'N/A';
+    final weather = weatherProvider.dailyWeather.isNotEmpty
+        ? weatherProvider.dailyWeather[0]
+        : null;
 
-    final humidity = weatherProvider.weatherData.isNotEmpty
-        ? weatherProvider.weatherData['list'][0]['main']['humidity']
-        : 'N/A';
+    final temperature = weather != null ? '${weather['temp']} °C' : 'N/A';
+    final humidity = weather != null ? '${weather['humidity']}%' : 'N/A';
 
-    final soilMoisture = 50; // Static or fetched from a sensor (example value)
+    final soilMoisture = 50; // Example value or sensor integration
 
     return Card(
       elevation: 4,
@@ -39,12 +38,31 @@ class SoilHealthCard extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text('Nitrogen (N): $nValue mg/kg'),
-            Text('Phosphorus (P): $pValue mg/kg'),
-            Text('Potassium (K): $kValue mg/kg'),
-            Text('Temperature: $temperature °C'),
-            Text('Humidity: $humidity%'),
-            Text('Soil Moisture: $soilMoisture%'),
+            Text(
+              'Nitrogen (N): $nValue mg/kg',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Phosphorus (P): $pValue mg/kg',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Potassium (K): $kValue mg/kg',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Temperature: $temperature',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Humidity: $humidity',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Soil Moisture: $soilMoisture%',
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),

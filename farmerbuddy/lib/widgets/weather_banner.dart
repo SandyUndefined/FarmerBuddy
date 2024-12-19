@@ -7,14 +7,12 @@ class WeatherBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(
       builder: (context, weatherProvider, _) {
-        final forecast = weatherProvider.weatherData.isNotEmpty
-            ? weatherProvider.weatherData['list']
-            : [];
+        final dailyWeather = weatherProvider.dailyWeather;
 
-        if (forecast.isEmpty) {
-          return Center(
+        if (dailyWeather.isEmpty) {
+          return const Center(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 "Fetching weather data... Please wait.",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -32,30 +30,31 @@ class WeatherBanner extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '7-Day Weather Forecast',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const Center(
+                  child: Text(
+                    '7-Day Weather Forecast',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   height: 150,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: forecast.length > 7 ? 7 : forecast.length,
+                     itemCount: dailyWeather.length,
                     itemBuilder: (context, index) {
-                      final day = forecast[index];
-                      final temperature =
-                          day['main']['temp'].toStringAsFixed(1);
-                      final date = DateTime.parse(day['dt_txt']);
-                      final condition = day['weather'][0]['main'];
+                      final day = dailyWeather[index];
+                      final date = day['date'];
+                      final temp = day['temp'];
+                      final condition = day['condition'];
                       final icon = _getWeatherIcon(condition);
 
                       return Container(
                         width: 100,
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.blue.withOpacity(0.1),
@@ -68,23 +67,23 @@ class WeatherBanner extends StatelessWidget {
                               height: 40,
                               width: 40,
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
                               '${date.day}/${date.month}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              '$temperature°C',
-                              style: TextStyle(
+                              '$temp°C',
+                              style: const TextStyle(
                                 fontSize: 14,
                               ),
                             ),
                             Text(
                               condition,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
                               ),
