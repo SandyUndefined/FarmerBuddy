@@ -10,7 +10,7 @@ class UserSettingScreen extends StatefulWidget {
 class _UserSettingScreenState extends State<UserSettingScreen> {
   final _apiKeyController = TextEditingController();
   final _channelIdController = TextEditingController();
-  DateTime? _selectedDate;
+  String _selectedLanguage = 'en';
 
   @override
   void initState() {
@@ -19,28 +19,12 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
         Provider.of<UserSettingsProvider>(context, listen: false);
     _apiKeyController.text = settingsProvider.userSettings.thingspeakApiKey;
     _channelIdController.text = settingsProvider.userSettings.channelId;
-    _selectedDate = settingsProvider.userSettings.cropDate;
-  }
-
-  void _selectDate(BuildContext context) async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _selectedDate = selectedDate;
-      });
-      Provider.of<UserSettingsProvider>(context, listen: false)
-          .updateCropDate(selectedDate);
-    }
+    _selectedLanguage = settingsProvider.userSettings.language ?? 'en';
   }
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<UserSettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('User Settings')),
       body: Padding(
@@ -53,8 +37,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               decoration:
                   const InputDecoration(labelText: 'Thingspeak API Key'),
               onChanged: (value) {
-                Provider.of<UserSettingsProvider>(context, listen: false)
-                    .updateThingspeakApiKey(value);
+                settingsProvider.updateThingspeakApiKey(value);
               },
             ),
             const SizedBox(height: 10),
@@ -62,22 +45,27 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               controller: _channelIdController,
               decoration: const InputDecoration(labelText: 'Channel ID'),
               onChanged: (value) {
-                Provider.of<UserSettingsProvider>(context, listen: false)
-                    .updateChannelId(value);
+                settingsProvider.updateChannelId(value);
               },
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Crop Date: ${_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'Not set'}',
-                ),
-                ElevatedButton(
-                  onPressed: () => _selectDate(context),
-                  child: const Text('Select Date'),
-                ),
+            const Text(
+              'Language',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            DropdownButton<String>(
+              value: _selectedLanguage,
+              items: const [
+                DropdownMenuItem(value: 'en', child: Text('English')),
+                DropdownMenuItem(value: 'hi', child: Text('Hindi')),
               ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedLanguage = value!;
+                });
+                settingsProvider.updateLanguage(value!);
+              },
             ),
           ],
         ),

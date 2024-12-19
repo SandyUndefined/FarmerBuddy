@@ -49,12 +49,14 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
             .split(' ')[0]
         : "N/A";
 
+    final language = userSettingsProvider.userSettings.language ?? 'en';
+
     try {
       final openAIService = OpenAIService();
       final soilHealth =
-          await openAIService.getSoilHealthReport(soilHealthData);
+          await openAIService.getSoilHealthReport(soilHealthData, language);
       final wateringAdvisory = await openAIService.getWateringAdvisoryReport(
-          soilHealthData, selectedDate);
+          soilHealthData, selectedDate, language);
 
       setState(() {
         _soilHealthReport = soilHealth;
@@ -99,7 +101,7 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
     );
   }
 
-  Widget _buildAnimatedCard(BuildContext context,
+Widget _buildAnimatedCard(BuildContext context,
       {required String title,
       required String content,
       required String backgroundImage}) {
@@ -135,25 +137,33 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
               content.length > 100
                   ? '${content.substring(0, 100)}...' // Truncated preview
                   : content,
-              style: TextStyle(fontSize: 16, color: Colors.white70),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white70,
+              ),
             ),
             const SizedBox(height: 10),
             const Text(
               "Tap to read more",
-              style: TextStyle(fontSize: 14, color: Colors.lightBlue),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.lightBlue,
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
 }

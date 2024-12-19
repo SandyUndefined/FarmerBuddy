@@ -22,6 +22,7 @@ class FarmerBuddyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          fontFamily: 'NotoSansDevanagari',
           primaryColor: AppColors.primary,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.deepPurple,
