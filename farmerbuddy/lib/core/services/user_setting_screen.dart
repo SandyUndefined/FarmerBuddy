@@ -1,8 +1,6 @@
-import 'package:farmerbuddy/widgets/profile_widget.dart';
+import 'package:farmerbuddy/providers/user_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/user_settings_provider.dart';
 
 class UserSettingScreen extends StatefulWidget {
   @override
@@ -10,83 +8,74 @@ class UserSettingScreen extends StatefulWidget {
 }
 
 class _UserSettingScreenState extends State<UserSettingScreen> {
-  final TextEditingController _apiKeyController = TextEditingController();
-  final TextEditingController _channelIdController = TextEditingController();
+  final _apiKeyController = TextEditingController();
+  final _channelIdController = TextEditingController();
+  DateTime? _selectedDate;
 
   @override
-  void dispose() {
-    _apiKeyController.dispose();
-    _channelIdController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    final settingsProvider =
+        Provider.of<UserSettingsProvider>(context, listen: false);
+    _apiKeyController.text = settingsProvider.userSettings.thingspeakApiKey;
+    _channelIdController.text = settingsProvider.userSettings.channelId;
+    _selectedDate = settingsProvider.userSettings.cropDate;
+  }
+
+  void _selectDate(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        _selectedDate = selectedDate;
+      });
+      Provider.of<UserSettingsProvider>(context, listen: false)
+          .updateCropDate(selectedDate);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userSettingsProvider =
-        Provider.of<UserSettingsProvider>(context, listen: false);
-    final userSettings = userSettingsProvider.userSettings;
-
-    _apiKeyController.text = userSettings.thingspeakApiKey;
-    _channelIdController.text = userSettings.channelId;
-
     return Scaffold(
-      appBar: AppBar(title: Text('User Settings')),
+      appBar: AppBar(title: const Text('User Settings')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile Section
-            ProfileWidget(),
-            SizedBox(height: 20),
-
-            // ThingSpeak API Key
             TextField(
               controller: _apiKeyController,
-              decoration: InputDecoration(
-                labelText: 'ThingSpeak API Key',
-                border: OutlineInputBorder(),
-              ),
+              decoration:
+                  const InputDecoration(labelText: 'Thingspeak API Key'),
               onChanged: (value) {
-                userSettingsProvider.updateThingspeakApiKey(value);
+                Provider.of<UserSettingsProvider>(context, listen: false)
+                    .updateThingspeakApiKey(value);
               },
             ),
-            SizedBox(height: 20),
-
-            // Channel ID
+            const SizedBox(height: 10),
             TextField(
               controller: _channelIdController,
-              decoration: InputDecoration(
-                labelText: 'Channel ID',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(labelText: 'Channel ID'),
               onChanged: (value) {
-                userSettingsProvider.updateChannelId(value);
+                Provider.of<UserSettingsProvider>(context, listen: false)
+                    .updateChannelId(value);
               },
             ),
-            SizedBox(height: 20),
-
-            // Crop Date Picker
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Crop Date: ${userSettings.cropDate != null ? userSettings.cropDate!.toLocal().toString().split(' ')[0] : 'Not selected'}',
-                  style: TextStyle(fontSize: 16),
+                  'Crop Date: ${_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'Not set'}',
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    DateTime? selectedDate = await showDatePicker(
-                      context: context,
-                      initialDate: userSettings.cropDate ?? DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (selectedDate != null) {
-                      userSettingsProvider.updateCropDate(selectedDate);
-                    }
-                  },
-                  child: Text('Select Date'),
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Select Date'),
                 ),
               ],
             ),
