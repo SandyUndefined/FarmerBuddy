@@ -24,7 +24,7 @@ class NPKCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Container(
-        height: 200,
+        height: 100, // Updated height
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           image: DecorationImage(
@@ -38,54 +38,54 @@ class NPKCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Title
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              // Text Details
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
               // Value and Unit
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     value.toStringAsFixed(1),
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 21,
                       fontWeight: FontWeight.bold,
                       color: AppColors.highlighter,
                     ),
                   ),
-                  SizedBox(width: 8),
                   Text(
                     unit,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
                 ],
-              ),
-              SizedBox(height: 10),
-              // Description
-              Expanded(
-                child: Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
               ),
             ],
           ),

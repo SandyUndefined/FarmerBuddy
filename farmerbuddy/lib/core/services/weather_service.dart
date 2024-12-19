@@ -12,7 +12,7 @@ class WeatherService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to load weather data');
+      throw Exception('Failed to load weather data: ${response.body}');
     }
   }
 }
