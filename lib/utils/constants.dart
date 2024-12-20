@@ -74,7 +74,6 @@ const List<String> cropList = [
   'Castor',
   'Sesame',
   'Safflower',
-  'Sunflower',
   'Groundnut',
   'Beetroot',
   'Sweet Potato',
