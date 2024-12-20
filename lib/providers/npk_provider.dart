@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/services/thingspeak_service.dart';
 import '../providers/user_settings_provider.dart';
-
 class NPKProvider with ChangeNotifier {
-  List<double> _nValues = [];
-  List<double> _pValues = [];
-  List<double> _kValues = [];
+  List<double> _temperature = [0];
+  List<double> _humidity = [0];
+  List<double> _moisture = [0];
+  List<double> _nValues = [0];
+  List<double> _pValues = [0];
+  List<double> _kValues = [0];
 
+  List<double> get temperature => _temperature;
+  List<double> get humidity => _humidity;
+  List<double> get moisture => _moisture;
   List<double> get nValues => _nValues;
   List<double> get pValues => _pValues;
   List<double> get kValues => _kValues;
@@ -23,18 +28,20 @@ class NPKProvider with ChangeNotifier {
     }
 
     final baseUrl = 'https://api.thingspeak.com/channels/$channelId/fields';
-    final results = '10'; // Fetch the last 10 results
+    final results = '10';
 
     try {
-      _nValues = await ThingSpeakService.fetchFieldData(
+      _temperature = await ThingSpeakService.fetchFieldData(
           '$baseUrl/1.json?api_key=$apiKey&results=$results', 'field1');
-      _pValues = await ThingSpeakService.fetchFieldData(
+      _humidity = await ThingSpeakService.fetchFieldData(
           '$baseUrl/2.json?api_key=$apiKey&results=$results', 'field2');
-      _kValues = await ThingSpeakService.fetchFieldData(
+      _moisture = await ThingSpeakService.fetchFieldData(
           '$baseUrl/3.json?api_key=$apiKey&results=$results', 'field3');
+      _nValues = await ThingSpeakService.fetchFieldData(
+          '$baseUrl/4.json?api_key=$apiKey&results=$results', 'field4');
       notifyListeners();
     } catch (e) {
-      throw Exception('Error fetching NPK data: $e');
+      throw Exception('Error fetching field data: $e');
     }
   }
 }

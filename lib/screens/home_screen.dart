@@ -2,7 +2,7 @@ import 'package:farmerbuddy/providers/weather_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/npk_provider.dart';
-import '../widgets/npk_card.dart';
+import '../widgets/custom_card.dart';
 import '../widgets/weather_banner.dart';
 import '../utils/location_helper.dart';
 
@@ -46,42 +46,59 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Consumer<NPKProvider>(
               builder: (ctx, provider, _) {
-                if (provider.nValues.isEmpty ||
-                    provider.pValues.isEmpty ||
-                    provider.kValues.isEmpty) {
+                if (provider.temperature.isEmpty ||
+                    provider.humidity.isEmpty ||
+                    provider.moisture.isEmpty ||
+                    provider.nValues.isEmpty) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Text("Fetching NPK data... Please wait."),
+                      child: Text("Fetching field data... Please wait."),
                     ),
                   );
                 }
                 return Column(
                   children: [
-                    NPKCard(
-                      title: 'Nitrogen (N)',
-                      value: provider.nValues.last,
-                      unit: 'mg/kg',
-                      description:
-                          'Essential for plant growth and photosynthesis.',
-                      backgroundImage: 'assets/nitrogen_bg.jpg',
+                    CustomCard(
+                      title: 'Temperature',
+                      value: provider.temperature.isNotEmpty
+                          ? provider.temperature.last
+                          : 'N/A',
+                      unit: '°C',
+                      description: 'Field temperature measured in real-time.',
+                      backgroundImage: 'assets/temperature_bg.jpg',
                     ),
                     const SizedBox(height: 10),
-                    NPKCard(
-                      title: 'Phosphorus (P)',
-                      value: provider.pValues.last,
-                      unit: 'mg/kg',
-                      description: 'Promotes root development and flowering.',
-                      backgroundImage: 'assets/phosphorus_bg.jpg',
+                    CustomCard(
+                      title: 'Humidity',
+                      value: provider.humidity.isNotEmpty
+                          ? provider.humidity.last
+                          : 'N/A',
+                      unit: '%',
+                      description: 'Field humidity measured in real-time.',
+                      backgroundImage: 'assets/humidity_bg.jpg',
                     ),
                     const SizedBox(height: 10),
-                    NPKCard(
-                      title: 'Potassium (K)',
-                      value: provider.kValues.last,
-                      unit: 'mg/kg',
-                      description:
-                          'Helps regulate water and nutrient movement.',
-                      backgroundImage: 'assets/potassium_bg.jpg',
+                    CustomCard(
+                      title: 'Moisture',
+                      value: provider.moisture.isNotEmpty
+                          ? provider.moisture.last
+                          : 'N/A',
+                      unit: '%',
+                      description: 'Soil moisture content.',
+                      backgroundImage: 'assets/moisture_bg.png',
+                    ),
+                    const SizedBox(height: 10),
+                    CustomCard(
+                      title: 'NPK',
+                      value: provider.nValues.isNotEmpty &&
+                              provider.pValues.isNotEmpty &&
+                              provider.kValues.isNotEmpty
+                          ? '${provider.nValues.last}N, ${provider.pValues.last}P, ${provider.kValues.last}K'
+                          : 'N/A',
+                      unit: '',
+                      description: 'NPK levels in the soil.',
+                      backgroundImage: 'assets/npk_bg.jpg',
                     ),
                   ],
                 );

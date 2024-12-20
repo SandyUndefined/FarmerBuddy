@@ -74,9 +74,10 @@ flutter:
         - asset: assets/fonts/NotoSansDevanagari-Bold.ttf
   assets:
     - .env
-    - assets/nitrogen_bg.jpg
-    - assets/phosphorus_bg.jpg
-    - assets/potassium_bg.jpg
+    - assets/temperature_bg.jpg
+    - assets/humidity_bg.jpg
+    - assets/moisture_bg.png
+    - assets/npk_bg.jpg
     - assets/sunny.png
     - assets/rainy.png
     - assets/cloudy.png
