@@ -1,5 +1,5 @@
 import 'package:farmerbuddy/app_colors.dart';
-import 'package:farmerbuddy/core/services/user_setting_screen.dart';
+import 'package:farmerbuddy/screens/user_setting_screen.dart';
 import 'package:farmerbuddy/utils/location_helper.dart';
 import 'package:farmerbuddy/widgets/custom_app_bar.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
