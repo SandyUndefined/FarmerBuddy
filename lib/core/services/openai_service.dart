@@ -6,23 +6,22 @@ class OpenAIService {
   final String apiKey = dotenv.env['OPENAI_API_KEY'] ?? '';
 
   Future<String> getSoilHealthReport(
-      Map<String, dynamic> data, String language) async {
-    // Pass the language parameter to the prompt generator
-    final prompt = _generateSoilHealthPrompt(data, language);
+      Map<String, dynamic> data, String language, String cropType) async {
+    final prompt = _generateSoilHealthPrompt(data, language, cropType);
     return await _callOpenAIChatAPI(prompt, language);
   }
 
-  Future<String> getWateringAdvisoryReport(
-      Map<String, dynamic> data, String date, String language) async {
-    // Pass the language parameter to the prompt generator
-    final prompt = _generateWateringPrompt(data, date, language);
+  Future<String> getWateringAdvisoryReport(Map<String, dynamic> data,
+      String date, String language, String cropType) async {
+    final prompt = _generateWateringPrompt(data, date, language, cropType);
     return await _callOpenAIChatAPI(prompt, language);
   }
 
-  String _generateSoilHealthPrompt(Map<String, dynamic> data, String language) {
+  String _generateSoilHealthPrompt(
+      Map<String, dynamic> data, String language, String cropType) {
     if (language == 'hi') {
       return """
-निम्नलिखित डेटा के आधार पर एक विस्तृत मृदा स्वास्थ्य रिपोर्ट तैयार करें:
+चुनी गई फसल: $cropType के लिए निम्नलिखित डेटा के आधार पर विस्तृत मृदा स्वास्थ्य रिपोर्ट तैयार करें:
 - नाइट्रोजन: ${data['n']} मिलीग्राम/किलोग्राम
 - फास्फोरस: ${data['p']} मिलीग्राम/किलोग्राम
 - पोटैशियम: ${data['k']} मिलीग्राम/किलोग्राम
@@ -30,11 +29,11 @@ class OpenAIService {
 - आर्द्रता: ${data['humidity']}%
 - मृदा नमी: ${data['soilMoisture']}%
 
-कृपया इस मृदा स्वास्थ्य स्थिति के लिए कौन सी फसलें सबसे उपयुक्त होंगी उनके लिए सिफारिशें शामिल करें। रिपोर्ट को विस्तारपूर्वक हिंदी में तैयार करें।
+कृपया इस मृदा स्वास्थ्य स्थिति के लिए फसल की उपयुक्तता और किसी भी सुधारात्मक उपायों को शामिल करें। रिपोर्ट को विस्तारपूर्वक हिंदी में तैयार करें।
 """;
     } else {
       return """
-Generate a detailed soil health report based on the following data:
+Generate a detailed soil health report for the selected crop: $cropType based on the following data:
 - Nitrogen: ${data['n']} mg/kg
 - Phosphorus: ${data['p']} mg/kg
 - Potassium: ${data['k']} mg/kg
@@ -42,16 +41,16 @@ Generate a detailed soil health report based on the following data:
 - Humidity: ${data['humidity']}%
 - Soil Moisture: ${data['soilMoisture']}%
 
-Please include recommendations for which crops would be best suited for this soil health condition.
+Include recommendations for the suitability of the crop and any corrective measures if needed.
 """;
     }
   }
 
-  String _generateWateringPrompt(
-      Map<String, dynamic> data, String date, String language) {
+  String _generateWateringPrompt(Map<String, dynamic> data, String date,
+      String language, String cropType) {
     if (language == 'hi') {
       return """
-निम्नलिखित मृदा स्वास्थ्य डेटा और चुनी गई तारीख ($date) के आधार पर, फसलों के लिए विस्तृत जल देने की सलाह प्रदान करें:
+चुनी गई फसल: $cropType और चयनित तारीख ($date) के लिए निम्नलिखित मृदा स्वास्थ्य डेटा के आधार पर, फसलों के लिए जल देने की विस्तृत सलाह प्रदान करें:
 - नाइट्रोजन: ${data['n']} मिलीग्राम/किलोग्राम
 - फास्फोरस: ${data['p']} मिलीग्राम/किलोग्राम
 - पोटैशियम: ${data['k']} मिलीग्राम/किलोग्राम
@@ -63,7 +62,7 @@ Please include recommendations for which crops would be best suited for this soi
 """;
     } else {
       return """
-Based on the soil health data and the selected date ($date), generate a comprehensive watering advisory report for crops:
+Generate a comprehensive watering advisory report for the selected crop: $cropType based on the soil health data and the selected date ($date):
 - Nitrogen: ${data['n']} mg/kg
 - Phosphorus: ${data['p']} mg/kg
 - Potassium: ${data['k']} mg/kg
@@ -71,7 +70,7 @@ Based on the soil health data and the selected date ($date), generate a comprehe
 - Humidity: ${data['humidity']}%
 - Soil Moisture: ${data['soilMoisture']}%
 
-Please provide detailed recommendations.
+Provide detailed recommendations for watering.
 """;
     }
   }
@@ -92,7 +91,7 @@ Please provide detailed recommendations.
     ];
 
     final body = {
-      "model": "gpt-3.5-turbo",
+      "model": "gpt-4",
       "messages": messages,
       "temperature": 0.7,
       "max_tokens": 2000, // Increase max tokens for detailed responses

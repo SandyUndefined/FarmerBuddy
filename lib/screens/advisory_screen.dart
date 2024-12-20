@@ -42,6 +42,8 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
       "soilMoisture": 50, // Example or fetched value
     };
 
+    final selectedCrop =
+        userSettingsProvider.userSettings.cropType ?? "Unknown Crop";
     final selectedDate = userSettingsProvider.userSettings.cropDate != null
         ? userSettingsProvider.userSettings.cropDate!
             .toLocal()
@@ -53,10 +55,11 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
 
     try {
       final openAIService = OpenAIService();
-      final soilHealth =
-          await openAIService.getSoilHealthReport(soilHealthData, language);
+      final soilHealth = await openAIService.getSoilHealthReport(
+          soilHealthData, language, selectedCrop);
+
       final wateringAdvisory = await openAIService.getWateringAdvisoryReport(
-          soilHealthData, selectedDate, language);
+          soilHealthData, selectedDate, language, selectedCrop);
 
       setState(() {
         _soilHealthReport = soilHealth;
@@ -77,7 +80,7 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -136,7 +139,7 @@ Widget _buildAnimatedCard(BuildContext context,
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -147,7 +150,7 @@ Widget _buildAnimatedCard(BuildContext context,
               content.length > 100
                   ? '${content.substring(0, 100)}...' // Truncated preview
                   : content,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
               ),
