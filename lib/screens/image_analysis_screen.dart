@@ -72,7 +72,7 @@ void _showResultDialog({
                   }
                 }
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -83,8 +83,8 @@ void _showResultDialog({
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Image Analysis')),
-      body: Center(
+      appBar: AppBar(title: const Text('Image Analysis')),
+      body: const Center(
         child: Text(
           'Analyzing...',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
