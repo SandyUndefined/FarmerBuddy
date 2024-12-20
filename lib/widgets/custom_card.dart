@@ -19,15 +19,19 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8), // Spacing between cards
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Container(
+        width: MediaQuery.of(context).size.width, // Full width
+        height: 150, // Fixed height
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
             image: AssetImage(backgroundImage),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3),
+              Colors.black
+                  .withOpacity(0.3), // Dark overlay for text readability
               BlendMode.darken,
             ),
           ),

@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Consumer<NPKProvider>(
@@ -68,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       description: 'Field temperature measured in real-time.',
                       backgroundImage: 'assets/temperature_bg.jpg',
                     ),
-                    const SizedBox(height: 10),
                     CustomCard(
                       title: 'Humidity',
                       value: provider.humidity.isNotEmpty
@@ -78,7 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       description: 'Field humidity measured in real-time.',
                       backgroundImage: 'assets/humidity_bg.jpg',
                     ),
-                    const SizedBox(height: 10),
                     CustomCard(
                       title: 'Moisture',
                       value: provider.moisture.isNotEmpty
@@ -88,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       description: 'Soil moisture content.',
                       backgroundImage: 'assets/moisture_bg.png',
                     ),
-                    const SizedBox(height: 10),
                     CustomCard(
                       title: 'NPK',
                       value: provider.nValues.isNotEmpty &&
@@ -104,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            const SizedBox(height: 16),
             WeatherBanner(),
           ],
         ),
