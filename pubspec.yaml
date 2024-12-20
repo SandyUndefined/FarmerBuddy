@@ -39,6 +39,7 @@ dependencies:
   image: ^4.5.0
   shared_preferences: ^2.3.3
   flashy_tab_bar2: ^0.0.10
+  flutter_dotenv: ^5.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +73,7 @@ flutter:
         - asset: assets/fonts/NotoSansDevanagari-Regular.ttf
         - asset: assets/fonts/NotoSansDevanagari-Bold.ttf
   assets:
+    - .env
     - assets/nitrogen_bg.jpg
     - assets/phosphorus_bg.jpg
     - assets/potassium_bg.jpg

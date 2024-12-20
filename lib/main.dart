@@ -5,8 +5,11 @@ import 'screens/main_screen.dart';
 import 'providers/npk_provider.dart';
 import 'providers/weather_provider.dart';
 import 'providers/user_settings_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure binding is initialized
+  await dotenv.load(fileName: ".env");
   runApp(FarmerBuddyApp());
 }
 
