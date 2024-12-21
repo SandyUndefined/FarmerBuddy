@@ -42,6 +42,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   dropdown_search: ^6.0.1
   shimmer: ^3.0.0
+  introduction_screen: ^3.1.14
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -87,6 +88,9 @@ flutter:
     - assets/default.png
     - assets/soil_health_bg.jpg
     - assets/watering_advisory_bg.jpg
+    - assets/intro_monitor.png
+    - assets/intro_weather.jpg
+    - assets/intro_advice.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

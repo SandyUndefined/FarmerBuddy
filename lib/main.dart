@@ -2,10 +2,12 @@ import 'package:farmerbuddy/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/main_screen.dart';
+import 'screens/introduction_screen.dart'; // Import the introduction screen
 import 'providers/npk_provider.dart';
 import 'providers/weather_provider.dart';
 import 'providers/user_settings_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure binding is initialized
@@ -60,8 +62,32 @@ class FarmerBuddyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: MainScreen(),
+        home:
+            AppStartupScreen(), // Updated to show IntroductionScreen or MainScreen
       ),
+    );
+  }
+}
+
+class AppStartupScreen extends StatelessWidget {
+  Future<bool> _checkIfIntroductionSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('introduction_seen') ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkIfIntroductionSeen(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final seen = snapshot.data ?? false;
+        return seen
+            ? MainScreen()
+            : AppIntroductionScreen(); // Show appropriate screen
+      },
     );
   }
 }
