@@ -9,6 +9,8 @@ class ImageAnalysisScreen extends StatefulWidget {
 
 class _ImageAnalysisScreenState extends State<ImageAnalysisScreen> {
   final ImageAnalysisService _service = ImageAnalysisService();
+  bool _isAnalyzing = true;
+  String _result = '';
 
   @override
   void initState() {
@@ -19,77 +21,59 @@ class _ImageAnalysisScreenState extends State<ImageAnalysisScreen> {
   }
 
   Future<void> _analyzeImage() async {
+    setState(() {
+      _isAnalyzing = true;
+      _result = "Analyzing...";
+    });
+
     final result = await _service.takePictureAndAnalyze();
 
-    if (result.containsKey('error')) {
-      _showResultDialog(
-        title: 'Error',
-        content: result['error'],
-        isError: true,
-      );
-    } else {
-      _showResultDialog(
-        title: 'Analysis Result',
-        content: _formatPredictions(result['predictions']),
-        isError: false,
-      );
-    }
-  }
-
-  String _formatPredictions(List<dynamic> predictions) {
-    if (predictions.isEmpty) {
-      return 'No disease detected.';
-    }
-    return predictions.map((p) {
-      return 'Class: ${p['class']}, Confidence: ${(p['confidence'] * 100).toStringAsFixed(2)}%';
-    }).join('\n');
-  }
-
-void _showResultDialog({
-    required String title,
-    required String content,
-    required bool isError,
-  }) {
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Text(
-            title,
-            style: TextStyle(color: isError ? Colors.red : Colors.green),
-          ),
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop(); // Close the dialog
-                if (!isError) {
-                  // Navigate back to Home Screen
-                  final mainScreenState =
-                      context.findAncestorStateOfType<MainScreenState>();
-                  if (mainScreenState != null) {
-                    mainScreenState.setTabIndex(0);
-                  }
-                }
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    setState(() {
+      _isAnalyzing = false;
+      if (result.containsKey('error')) {
+        _result = 'Error: ${result['error']}';
+      } else {
+        _result = result['analysis'];
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Image Analysis')),
-      body: const Center(
-        child: Text(
-          'Analyzing...',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ),
+      body: _isAnalyzing
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Analysis Result:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    _result,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate back to Home Screen
+                      final mainScreenState =
+                          context.findAncestorStateOfType<MainScreenState>();
+                      if (mainScreenState != null) {
+                        mainScreenState.setTabIndex(0);
+                      }
+                    },
+                    child: const Text('Back to Home'),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
