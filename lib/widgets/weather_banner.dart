@@ -1,8 +1,25 @@
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
 
 class WeatherBanner extends StatelessWidget {
+  Widget _buildShimmerBanner() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 150,
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(
@@ -10,15 +27,7 @@ class WeatherBanner extends StatelessWidget {
         final dailyWeather = weatherProvider.dailyWeather;
 
         if (dailyWeather.isEmpty) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Fetching weather data... Please wait.",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-              ),
-            ),
-          );
+          return _buildShimmerBanner();
         }
 
         return Card(
@@ -44,7 +53,7 @@ class WeatherBanner extends StatelessWidget {
                   height: 150,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                     itemCount: dailyWeather.length,
+                    itemCount: dailyWeather.length,
                     itemBuilder: (context, index) {
                       final day = dailyWeather[index];
                       final date = day['date'];

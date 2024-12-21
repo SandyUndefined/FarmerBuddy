@@ -1,6 +1,7 @@
 import 'package:farmerbuddy/providers/weather_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../providers/npk_provider.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/weather_banner.dart';
@@ -38,6 +39,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Widget _buildShimmerCard() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 150,
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,49 +68,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     provider.humidity.isEmpty ||
                     provider.moisture.isEmpty ||
                     provider.nValues.isEmpty) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text("Fetching field data... Please wait."),
-                    ),
+                  return Column(
+                    children: List.generate(4, (_) => _buildShimmerCard()),
                   );
                 }
                 return Column(
                   children: [
                     CustomCard(
                       title: 'Temperature',
-                      value: provider.temperature.isNotEmpty
-                          ? provider.temperature.last
-                          : 'N/A',
+                      value: provider.temperature.last,
                       unit: '°C',
                       description: 'Field temperature measured in real-time.',
                       backgroundImage: 'assets/temperature_bg.jpg',
                     ),
                     CustomCard(
                       title: 'Humidity',
-                      value: provider.humidity.isNotEmpty
-                          ? provider.humidity.last
-                          : 'N/A',
+                      value: provider.humidity.last,
                       unit: '%',
                       description: 'Field humidity measured in real-time.',
                       backgroundImage: 'assets/humidity_bg.jpg',
                     ),
                     CustomCard(
                       title: 'Moisture',
-                      value: provider.moisture.isNotEmpty
-                          ? provider.moisture.last
-                          : 'N/A',
+                      value: provider.moisture.last,
                       unit: '%',
                       description: 'Soil moisture content.',
                       backgroundImage: 'assets/moisture_bg.png',
                     ),
                     CustomCard(
                       title: 'NPK',
-                      value: provider.nValues.isNotEmpty &&
-                              provider.pValues.isNotEmpty &&
-                              provider.kValues.isNotEmpty
-                          ? '${provider.nValues.last}N, ${provider.pValues.last}P, ${provider.kValues.last}K'
-                          : 'N/A',
+                      value:
+                          '${provider.nValues.last}N, ${provider.pValues.last}P, ${provider.kValues.last}K',
                       unit: '',
                       description: 'NPK levels in the soil.',
                       backgroundImage: 'assets/npk_bg.jpg',

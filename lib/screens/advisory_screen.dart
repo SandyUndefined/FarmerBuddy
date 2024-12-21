@@ -5,6 +5,7 @@ import '../providers/weather_provider.dart';
 import '../providers/user_settings_provider.dart';
 import '../core/services/openai_service.dart';
 import 'advisory_detail_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AdvisoryScreen extends StatefulWidget {
   @override
@@ -76,11 +77,29 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
     }
   }
 
+  Widget _buildShimmerCard() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 150,
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Column(
+              children: List.generate(2, (_) => _buildShimmerCard()),
+            )
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
